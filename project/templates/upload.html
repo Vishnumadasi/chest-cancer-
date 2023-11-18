@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Upload and Dialogue Boxes</title>
+    <style>
+        /* Modern styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .image-container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .image-container > div {
+            flex: 1 1 calc(33.33% - 20px);
+            margin: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            max-height: 200px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+
+        .image-container img:hover {
+            transform: scale(1.05);
+        }
+
+        .dialogue-box {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            margin-top: 10px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Image upload button */
+        .upload-container {
+            max-width: 400px;
+            margin: 20px auto;
+            text-align: center;
+        }
+
+        .upload-container label {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .upload-container label:hover {
+            background-color: #0056b3;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Image Upload and Dialogue Boxes</h1>
+
+    <!-- Image upload button -->
+    <div class="upload-container">
+        <label for="imageInput">Upload Image</label>
+        <input type="file" id="imageInput" accept="image/*">
+    </div>
+
+    <!-- Display uploaded images -->
+    <div class="image-container">
+        {% for image_url in uploaded_images %}
+            <div>
+                <img src="{{ image_url }}" alt="Uploaded Image">
+                <div class="dialogue-box">Uploaded Image {{ forloop.counter }}</div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <script>
+        // Function to handle image upload
+        const imageContainer = document.querySelector('.image-container');
+
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                // Create a new div element
+                const div = document.createElement('div');
+                div.innerHTML = `
+                    <img src="${e.target.result}" alt="Uploaded Image">
+                    <div class="dialogue-box">Uploaded Image</div>
+                `;
+
+                // Add the new div element to the image container
+                imageContainer.appendChild(div);
+            }
+
+            reader.readAsDataURL(file);
+        }
+
+        // Add event listener to the image upload button
+        document.getElementById('imageInput').addEventListener('change', handleImageUpload);
+    </script>
+</body>
+</html>
